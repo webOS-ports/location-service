@@ -1,0 +1,12 @@
+[Unit]
+Description=Location service for LuneOS
+Requires=ls-hubd_private.service ls-hubd_public.service
+After=ls-hubd_private.service ls-hubd_public.service
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/usr/sbin/location-service
+
+[Install]
+WantedBy=multi-user.target
