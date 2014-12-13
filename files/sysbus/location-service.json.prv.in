@@ -1,0 +1,14 @@
+{
+    "role": {
+        "exeName":"@WEBOS_INSTALL_SBINDIR@/location-service",
+        "type": "privileged",
+        "allowedNames": ["org.webosports.location"]
+    },
+    "permissions": [
+        {
+            "service":"org.webosports.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        }
+    ]
+}
