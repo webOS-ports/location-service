@@ -22,6 +22,7 @@
 
 #include <luna-service2/lunaservice.h>
 #include <glib.h>
+#include <stdlib.h>
 
 #include "location_service.h"
 
@@ -79,15 +80,22 @@ int main(int argc, char **argv)
 
 	event_loop = g_main_loop_new(NULL, FALSE);
 
-	service = location_service_create();
+	service = g_try_new0(struct location_service, 1);
 	if (!service)
+		goto exit;
+	if (!location_service_register(service, &service->handle_ports, "org.webosports.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_palm, "com.palm.location"))
 		goto exit;
 
 	g_main_loop_run(event_loop);
 
 exit:
-	if (service)
-		location_service_free(service);
+	if (service) {
+		location_service_unregister(service->handle_ports);
+		location_service_unregister(service->handle_palm);
+		g_free(service);
+	}
 
 	g_main_loop_unref(event_loop);
 
