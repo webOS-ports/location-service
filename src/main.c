@@ -1,23 +1,28 @@
 /* @@@LICENSE
 *
-* Copyright (c) 2013 Simon Busch <morphis@gravedo.de>
+* Copyright (c) 2014 Simon Busch <morphis@gravedo.de>
+* Copyright (c) 2014 Nikolay Nizov <nizovn@gmail.com>
 *
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
+* This file is part of location-service.
 *
-* http://www.apache.org/licenses/LICENSE-2.0
+* location-service is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
 *
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
+* location-service is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with location-service.  If not, see <http://www.gnu.org/licenses/>.
 *
 * LICENSE@@@ */
 
 #include <luna-service2/lunaservice.h>
 #include <glib.h>
+#include <stdlib.h>
 
 #include "location_service.h"
 
@@ -75,15 +80,22 @@ int main(int argc, char **argv)
 
 	event_loop = g_main_loop_new(NULL, FALSE);
 
-	service = location_service_create();
+	service = g_try_new0(struct location_service, 1);
 	if (!service)
+		goto exit;
+	if (!location_service_register(service, &service->handle_ports, "org.webosports.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_palm, "com.palm.location"))
 		goto exit;
 
 	g_main_loop_run(event_loop);
 
 exit:
-	if (service)
-		location_service_free(service);
+	if (service) {
+		location_service_unregister(service->handle_ports);
+		location_service_unregister(service->handle_palm);
+		g_free(service);
+	}
 
 	g_main_loop_unref(event_loop);
 

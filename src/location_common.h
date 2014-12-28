@@ -1,6 +1,5 @@
 /* @@@LICENSE
 *
-* Copyright (c) 2014 Simon Busch <morphis@gravedo.de>
 * Copyright (c) 2014 Nikolay Nizov <nizovn@gmail.com>
 *
 * This file is part of location-service.
@@ -20,23 +19,21 @@
 *
 * LICENSE@@@ */
 
-#ifndef LOCATION_SERVICE_H_
-#define LOCATION_SERVICE_H_
+#ifndef LOCATION_COMMON_H_
+#define LOCATION_COMMON_H_
 
+#include <pbnjson.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
-struct location_service {
-	LSHandle *handle_ports;
-	LSHandle *handle_palm;
-	GDBusProxy *manager;
-	GDBusProxy *client_props;
-	GDBusProxy *subscribed_client;
-	int num_clients_ports;
-	int num_clients_palm;
-};
+typedef enum {
+	GCLUE_ACCURACY_LEVEL_COUNTRY = 1,
+	GCLUE_ACCURACY_LEVEL_CITY = 4,
+	GCLUE_ACCURACY_LEVEL_NEIGHBORHOOD = 5,
+	GCLUE_ACCURACY_LEVEL_STREET = 6,
+	GCLUE_ACCURACY_LEVEL_EXACT = 8,
+} GClueAccuracyLevel;
 
-bool location_service_register(struct location_service *service, LSHandle **handle, const char *name);
-void location_service_unregister(LSHandle *handle);
+void location_to_reply(GDBusProxy *location, jvalue_ref *reply_obj);
 
 #endif
