@@ -1,4 +1,4 @@
 [D-BUS Service]
-Name=org.webosports.location
+Name=org.webosports.location;com.palm.location
 Exec=@WEBOS_INSTALL_SBINDIR@/location-service
 Type=static
