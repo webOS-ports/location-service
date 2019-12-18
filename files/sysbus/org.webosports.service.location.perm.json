@@ -1,0 +1,11 @@
+{
+    "org.webosports.service.location": [ 
+        "services"
+    ],
+    "org.webosports.location": [ 
+        "services"
+    ],
+    "com.palm.location": [ 
+        "services"
+    ]
+}

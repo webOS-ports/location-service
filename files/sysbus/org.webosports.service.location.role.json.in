@@ -1,0 +1,22 @@
+{
+    "exeName":"@WEBOS_INSTALL_SBINDIR@/location-service",
+    "type": "privileged",
+    "allowedNames": ["org.webosports.service.location","org.webosports.location","com.palm.location"],
+    "permissions": [
+        {
+            "service":"org.webosports.service.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
+            "service":"org.webosports.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
+            "service":"com.palm.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        }
+    ]
+}
