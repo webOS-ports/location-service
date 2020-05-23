@@ -1,20 +1,35 @@
 {
     "exeName":"@WEBOS_INSTALL_SBINDIR@/location-service",
     "type": "privileged",
-    "allowedNames": ["org.webosports.service.location","org.webosports.location","com.palm.location"],
+    "allowedNames": ["org.webosports.service.location","org.webosports.location","com.palm.location", "com.palm.service.location", "com.webos.location", "com.webos.service.location"],
     "permissions": [
-        {
-            "service":"org.webosports.service.location",
-            "inbound":["*"],
-            "outbound":["*"]
-        },
         {
             "service":"org.webosports.location",
             "inbound":["*"],
             "outbound":["*"]
         },
         {
+            "service":"org.webosports.service.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
             "service":"com.palm.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
+            "service":"com.palm.service.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
+            "service":"com.webos.location",
+            "inbound":["*"],
+            "outbound":["*"]
+        },
+        {
+            "service":"com.webos.service.location",
             "inbound":["*"],
             "outbound":["*"]
         }

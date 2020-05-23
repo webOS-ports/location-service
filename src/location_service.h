@@ -27,13 +27,21 @@
 #include <gio/gio.h>
 
 struct location_service {
-	LSHandle *handle_ports;
-	LSHandle *handle_palm;
+	LSHandle *handle_ports1;
+	LSHandle *handle_ports2;
+	LSHandle *handle_palm1;
+	LSHandle *handle_palm2;
+	LSHandle *handle_webos1;
+	LSHandle *handle_webos2;
 	GDBusProxy *manager;
 	GDBusProxy *client_props;
 	GDBusProxy *subscribed_client;
-	int num_clients_ports;
-	int num_clients_palm;
+	int num_clients_ports1;
+	int num_clients_ports2;
+	int num_clients_palm1;
+	int num_clients_palm2;
+	int num_clients_webos1;
+	int num_clients_webos2;
 };
 
 bool location_service_register(struct location_service *service, LSHandle **handle, const char *name);

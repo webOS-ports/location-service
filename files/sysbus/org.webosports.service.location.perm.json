@@ -1,11 +1,20 @@
 {
-    "org.webosports.service.location": [ 
-        "services"
-    ],
     "org.webosports.location": [ 
-        "services"
+        "networking.internal", "networking.query", "telephony"
+    ],
+    "org.webosports.service.location": [ 
+        "networking.internal", "networking.query", "telephony"
     ],
     "com.palm.location": [ 
-        "services"
+        "networking.internal", "networking.query", "telephony"
+    ],
+    "com.palm.service.location": [ 
+        "networking.internal", "networking.query", "telephony"
+    ],
+    "com.webos.location": [ 
+        "networking.internal", "networking.query", "telephony"
+    ],
+    "com.webos.service.location": [ 
+        "networking.internal", "networking.query", "telephony"
     ]
 }
