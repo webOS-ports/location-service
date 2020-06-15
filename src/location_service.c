@@ -476,7 +476,7 @@ bool location_service_register(struct location_service *service, LSHandle **hand
 	LSError error;
 	LSErrorInit(&error);
 
-	if (!LSRegisterPubPriv(name, handle, false, &error)) {
+	if (!LSRegister(name, handle, &error)) {
 		g_warning("Failed to register the luna service: %s", error.message);
 		LSErrorFree(&error);
 		goto error;
