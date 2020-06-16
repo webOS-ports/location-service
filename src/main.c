@@ -83,17 +83,29 @@ int main(int argc, char **argv)
 	service = g_try_new0(struct location_service, 1);
 	if (!service)
 		goto exit;
-	if (!location_service_register(service, &service->handle_ports, "org.webosports.location"))
+	if (!location_service_register(service, &service->handle_ports1, "org.webosports.location"))
 		goto exit;
-	if (!location_service_register(service, &service->handle_palm, "com.palm.location"))
+	if (!location_service_register(service, &service->handle_ports2, "org.webosports.service.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_palm1, "com.palm.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_palm2, "com.palm.service.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_webos1, "com.webos.location"))
+		goto exit;
+	if (!location_service_register(service, &service->handle_webos2, "com.webos.service.location"))
 		goto exit;
 
 	g_main_loop_run(event_loop);
 
 exit:
 	if (service) {
-		location_service_unregister(service->handle_ports);
-		location_service_unregister(service->handle_palm);
+		location_service_unregister(service->handle_ports1);
+		location_service_unregister(service->handle_ports2);
+		location_service_unregister(service->handle_palm1);
+		location_service_unregister(service->handle_palm2);
+		location_service_unregister(service->handle_webos1);
+		location_service_unregister(service->handle_webos2);
 		g_free(service);
 	}
 

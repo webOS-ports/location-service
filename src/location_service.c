@@ -215,15 +215,24 @@ static void service_free(struct location_service *service)
 	service->manager = NULL;
 	service->client_props = NULL;
 	service->subscribed_client = NULL;
-	service->num_clients_ports = 0;
-	service->num_clients_palm = 0;
+	service->num_clients_ports1 = 0;
+	service->num_clients_ports2 = 0;
+	service->num_clients_palm1 = 0;
+	service->num_clients_palm2 = 0;
+	service->num_clients_webos1 = 0;
+	service->num_clients_webos2 = 0;
+
 }
 
 static void cancel_func(LSHandle* sh, LSMessage* msg, struct location_service *service)
 {
-	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_ports))) service->num_clients_ports--;
-	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_palm))) service->num_clients_palm--;
-	if ((service->num_clients_ports + service->num_clients_palm) <= 0) {
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_ports1))) service->num_clients_ports1--;
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_ports2))) service->num_clients_ports2--;
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_palm1))) service->num_clients_palm1--;
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_palm2))) service->num_clients_palm2--;    
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_webos1))) service->num_clients_webos1--;
+	if (!g_strcmp0(LSHandleGetName(sh), LSHandleGetName(service->handle_webos2))) service->num_clients_webos2--;
+	if ((service->num_clients_ports1 + service->num_clients_ports2 + service->num_clients_palm1 + service->num_clients_palm2 + service->num_clients_webos1 + service->num_clients_webos2) <= 0) {
 		GError *error = NULL;
 		GVariant *results = g_dbus_proxy_call_sync(service->subscribed_client,
 		                   "Stop",
@@ -249,11 +258,20 @@ static bool cbStartTracking(LSHandle *handle, LSMessage *message, void *user_dat
 	bool subscribed = luna_service_check_for_subscription_and_process(handle, message);
 	if (!subscribed) goto reply;
 
-	bool is_ports = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_ports));
-	bool is_palm = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_palm));
+	bool is_ports1 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_ports1));
+	bool is_ports2 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_ports2));
+	bool is_palm1 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_palm1));
+	bool is_palm2 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_palm2));
+	bool is_webos1 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_webos1));
+	bool is_webos2 = !g_strcmp0(LSHandleGetName(handle), LSHandleGetName(service->handle_webos2));
+
 	if (service->subscribed_client) {
-		if (is_ports) service->num_clients_ports++;
-		if (is_palm) service->num_clients_palm++;
+		if (is_ports1) service->num_clients_ports1++;
+		if (is_ports2) service->num_clients_ports2++;
+		if (is_palm1) service->num_clients_palm1++;
+		if (is_palm2) service->num_clients_palm2++;
+		if (is_webos1) service->num_clients_webos1++;
+		if (is_webos2) service->num_clients_webos2++;
 		goto reply;
 	}
 
@@ -277,8 +295,13 @@ static bool cbStartTracking(LSHandle *handle, LSMessage *message, void *user_dat
 		service_free(service);
 		return true;
 	}
-	if (is_ports) service->num_clients_ports++;
-	if (is_palm) service->num_clients_palm++;
+	if (is_ports1) service->num_clients_ports1++;
+	if (is_ports2) service->num_clients_ports2++;
+	if (is_palm1) service->num_clients_palm1++;
+	if (is_palm2) service->num_clients_palm2++;
+	if (is_webos1) service->num_clients_webos1++;
+	if (is_webos2) service->num_clients_webos2++;
+
 	g_variant_unref(results);
 reply:
 	luna_service_message_reply_success(handle, message);
@@ -320,10 +343,18 @@ on_client_signal (GDBusProxy *client,
 	reply_obj = jobject_create();
 	location_to_reply(location, &reply_obj);
 	g_object_unref (location);
-	if (service->num_clients_ports)
-		luna_service_post_subscription(service->handle_ports, "/", "startTracking", reply_obj);
-	if (service->num_clients_palm)
-		luna_service_post_subscription(service->handle_palm, "/", "startTracking", reply_obj);
+	if (service->num_clients_ports1)
+		luna_service_post_subscription(service->handle_ports1, "/", "startTracking", reply_obj);
+	if (service->num_clients_ports2)
+		luna_service_post_subscription(service->handle_ports2, "/", "startTracking", reply_obj);
+	if (service->num_clients_palm1)
+		luna_service_post_subscription(service->handle_palm1, "/", "startTracking", reply_obj);
+	if (service->num_clients_palm2)
+		luna_service_post_subscription(service->handle_palm2, "/", "startTracking", reply_obj);
+	if (service->num_clients_webos1)
+		luna_service_post_subscription(service->handle_webos1, "/", "startTracking", reply_obj);
+	if (service->num_clients_webos2)
+		luna_service_post_subscription(service->handle_webos2, "/", "startTracking", reply_obj);
 
 	if (!jis_null(reply_obj))
 		j_release(&reply_obj);
@@ -445,7 +476,7 @@ bool location_service_register(struct location_service *service, LSHandle **hand
 	LSError error;
 	LSErrorInit(&error);
 
-	if (!LSRegisterPubPriv(name, handle, false, &error)) {
+	if (!LSRegister(name, handle, &error)) {
 		g_warning("Failed to register the luna service: %s", error.message);
 		LSErrorFree(&error);
 		goto error;
