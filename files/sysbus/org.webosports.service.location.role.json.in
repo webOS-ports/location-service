@@ -1,5 +1,6 @@
 {
     "exeName":"@WEBOS_INSTALL_SBINDIR@/location-service",
+    "trustLevel": "oem",
     "type": "privileged",
     "allowedNames": ["org.webosports.service.location","org.webosports.location","com.palm.location", "com.palm.service.location", "com.webos.location", "com.webos.service.location"],
     "permissions": [

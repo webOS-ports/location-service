@@ -1,20 +1,20 @@
 {
     "org.webosports.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ],
     "org.webosports.service.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ],
     "com.palm.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ],
     "com.palm.service.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ],
     "com.webos.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ],
     "com.webos.service.location": [ 
-        "networking.internal", "networking.query", "telephony"
+        "networkconnection.management", "networkconnection.query", "telephony.management", "telephony.query", "wifi.management", "wifi.query"
     ]
 }
