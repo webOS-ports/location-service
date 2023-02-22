@@ -1,5 +1,5 @@
 {
-    "services": [
+    "location-service.operation": [
         "org.webosports.location/getCurrentPosition",
         "org.webosports.location/startTracking",
         "org.webosports.location/getAutoLocate",
